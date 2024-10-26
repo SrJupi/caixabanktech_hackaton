@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 public class UserRegisterDTO {
     @NotBlank(message = "Name is required")
     private String name;

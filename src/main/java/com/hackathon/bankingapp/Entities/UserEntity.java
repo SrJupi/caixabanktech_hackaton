@@ -25,7 +25,7 @@ public class UserEntity {
     private String  phoneNumber;
     private String  address;
     private String  hashedPassword;
-    private UUID    accountnumber;
+    private UUID    accountNumber;
 
     public UserEntity() {
     }
@@ -44,6 +44,6 @@ public class UserEntity {
         this.phoneNumber = userRegisterDTO.getPhoneNumber();
         this.address = userRegisterDTO.getAddress();
         this.hashedPassword = BCrypt.hashpw(userRegisterDTO.getPassword(), BCrypt.gensalt());
-        this.accountnumber = UUID.randomUUID();
+        this.accountNumber = UUID.randomUUID();
     }
 }

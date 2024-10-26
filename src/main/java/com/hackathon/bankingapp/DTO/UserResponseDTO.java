@@ -21,7 +21,7 @@ public class UserResponseDTO {
         this.email = user.getEmail();
         this.phoneNumber = user.getPhoneNumber();
         this.address = user.getAddress();
-        this.accountNumber = user.getAccountnumber();
+        this.accountNumber = user.getAccountNumber();
         this.hashedPassword = user.getHashedPassword();
     }
 }
