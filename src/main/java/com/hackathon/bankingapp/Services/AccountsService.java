@@ -8,6 +8,7 @@ import com.hackathon.bankingapp.Entities.AccountEntity;
 import com.hackathon.bankingapp.Entities.UserEntity;
 import com.hackathon.bankingapp.Repositories.AccountRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,9 @@ public class AccountsService {
         }
         UserEntity user = optionalUser.get();
         //check for pin
+        if (!user.getPin().equals(transaction.getPin())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid PIN");
+        }
 
         AccountEntity account = user.getAccount();
         if (!account.modifyBalance(transaction.getAmount())) {
@@ -43,6 +47,9 @@ public class AccountsService {
         }
         UserEntity user = optionalUser.get();
         //check for pin
+        if (!user.getPin().equals(transaction.getPin())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid PIN");
+        }
         AccountEntity account = user.getAccount();
         if (!account.modifyBalance(-transaction.getAmount())) {
             return ResponseEntity.badRequest().build();

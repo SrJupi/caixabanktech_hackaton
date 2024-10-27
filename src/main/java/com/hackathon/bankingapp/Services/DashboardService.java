@@ -4,6 +4,7 @@ import com.hackathon.bankingapp.DTO.AccountResponseDTO;
 import com.hackathon.bankingapp.DTO.UserResponseDTO;
 import com.hackathon.bankingapp.Entities.UserEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class DashboardService {
     public ResponseEntity<?> getUserInfo(String authorization) {
         Optional<UserEntity> optionalUser = usersService.getUserByToken(authorization);
         if (optionalUser.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Access Denied");
         }
         return ResponseEntity.ok(new UserResponseDTO(optionalUser.get()));
     }
@@ -26,7 +27,7 @@ public class DashboardService {
     public ResponseEntity<?> getAccountInfo(String authorization) {
         Optional<UserEntity> optionalUser = usersService.getUserByToken(authorization);
         if (optionalUser.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Access Denied");
         }
         return ResponseEntity.ok(new AccountResponseDTO(optionalUser.get().getAccount()));
     }
