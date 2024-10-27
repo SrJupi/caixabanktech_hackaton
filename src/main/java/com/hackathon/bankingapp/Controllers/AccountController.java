@@ -31,4 +31,19 @@ public class AccountController {
     ){
         return accountsService.withdraw(transaction, auth.substring(7));
     }
+
+/*    @PostMapping("/pin/create")
+    public ResponseEntity<?> createPin(
+            @RequestHeader("Authorization") String auth,
+            @RequestBody RequestTransaction transaction
+    )*/
 }
+
+
+/*
+Recordatorio de endpoints que faltan en el README:
+/api/account/pin/create -> POST
+/api/account/pin/update -> POST
+/api/account/assets -> GET -> Devuelve los assets que posee un usuario en su cuenta
+/api/account/net-worth -> GET -> Devuelve el patrimonio neto de una cuenta
+ */

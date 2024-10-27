@@ -1,27 +1,19 @@
-FROM eclipse-temurin:21-jdk
-
+FROM maven:3.9.9-eclipse-temurin-21-jammy AS builder
 # Set the working directory
 WORKDIR /app
 
 # Copy only the Maven wrapper and the pom.xml first
-COPY mvnw .
-COPY .mvn .mvn
 COPY pom.xml .
-
-# Give execute permission to the Maven wrapper
-RUN chmod +x mvnw
-
-# Install dependencies (this layer will be cached)
-RUN ./mvnw dependency:go-offline
-
-# Now copy the rest of the application code
+RUN mvn -e -B dependency:resolve
 COPY src ./src
+RUN mvn clean package -DskipTests
 
-# Build the application (this layer will be rebuilt only when src changes)
-RUN ./mvnw install -Dpmd.skip=true
+FROM eclipse-temurin:21-jdk
+WORKDIR /app
 
+COPY --from=builder /app/target/bankingapp-0.0.1-SNAPSHOT.jar .
 # Expose the application port
 EXPOSE 3000
 
 # Run the application
-CMD ["java", "-jar", "target/bankingapp-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "bankingapp-0.0.1-SNAPSHOT.jar"]
