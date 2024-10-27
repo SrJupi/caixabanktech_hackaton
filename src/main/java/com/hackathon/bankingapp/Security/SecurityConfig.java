@@ -26,13 +26,9 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/users/register").permitAll()
-                        .requestMatchers("/api/users/login").permitAll()
-                        .requestMatchers("/api/auth/password-reset/send-otp").permitAll()
-                        .requestMatchers("/api/auth/password-reset/verify-otp").permitAll()
-                        .requestMatchers("/api/auth/password-reset").permitAll()
-                        .requestMatchers("/market/prices").permitAll()
-                        .requestMatchers("/market/prices/**").permitAll()
+                        .requestMatchers("/api/users/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/market/**").permitAll()
                         .anyRequest()
                         .authenticated()
                 )
