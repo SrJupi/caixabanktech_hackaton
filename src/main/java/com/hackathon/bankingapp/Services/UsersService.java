@@ -1,12 +1,10 @@
 package com.hackathon.bankingapp.Services;
 
-import com.hackathon.bankingapp.DTO.TokenDTO;
 import com.hackathon.bankingapp.DTO.UserLoginDTO;
 import com.hackathon.bankingapp.DTO.UserRegisterDTO;
 import com.hackathon.bankingapp.DTO.UserResponseDTO;
 import com.hackathon.bankingapp.Entities.UserEntity;
 import com.hackathon.bankingapp.Repositories.UsersRepository;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -38,21 +37,25 @@ public class UsersService {
     }
 
     public ResponseEntity<?> loginUser(UserLoginDTO userLoginDto) {
-        UserEntity user;
+        Optional<UserEntity> optionalUser;
         try {
             UUID userUUID = UUID.fromString(userLoginDto.getIdentifier());
-            user = usersRepository.findByAccountNumber(userUUID);
+            optionalUser = usersRepository.findByaccount_id(userUUID);
         }
         catch (IllegalArgumentException exception) {
-            user = usersRepository.findByEmail(userLoginDto.getIdentifier());
+            optionalUser = usersRepository.findByEmail(userLoginDto.getIdentifier());
         }
-        if (user == null) {
+        if (optionalUser.isEmpty()) {
             return ResponseEntity.badRequest().body("User not found for the given identifier: " + userLoginDto.getIdentifier());
         }
-        if (!BCrypt.checkpw(userLoginDto.getPassword(), user.getHashedPassword())) {
+        if (!BCrypt.checkpw(userLoginDto.getPassword(), optionalUser.get().getHashedPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bad credentials");
         }
-        String token = "Token for " + user.getName();
+        String token = "Token for " + optionalUser.get().getName();
         return ResponseEntity.ok(token);
+    }
+
+    public Optional<UserEntity> getUserById (long id) {
+        return usersRepository.findById(id);
     }
 }
