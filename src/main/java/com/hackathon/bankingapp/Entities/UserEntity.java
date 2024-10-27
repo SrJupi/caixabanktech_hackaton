@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +28,7 @@ public class UserEntity implements UserDetails {
     private String  phoneNumber;
     private String  address;
     private String  hashedPassword;
+    private Date    logout;
 
     @Enumerated(EnumType.STRING)
     private Role    role;
@@ -46,6 +48,7 @@ public class UserEntity implements UserDetails {
         this.hashedPassword = BCrypt.hashpw(userRegisterDTO.getPassword(), BCrypt.gensalt());
         this.account = new AccountEntity(0.0);
         this.role = Role.USER;
+        this.logout = new Date();
     }
 
     public UUID getAccountNumber() {

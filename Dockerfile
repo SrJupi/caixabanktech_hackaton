@@ -18,7 +18,7 @@ RUN ./mvnw dependency:go-offline
 COPY src ./src
 
 # Build the application (this layer will be rebuilt only when src changes)
-RUN ./mvnw install -DskipTests -Dpmd.skip=true
+RUN ./mvnw install -Dpmd.skip=true
 
 # Expose the application port
 EXPOSE 3000

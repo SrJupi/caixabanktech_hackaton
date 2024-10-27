@@ -8,6 +8,7 @@ import com.hackathon.bankingapp.DTO.UserResponseDTO;
 import com.hackathon.bankingapp.Entities.UserEntity;
 import com.hackathon.bankingapp.Repositories.UsersRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -68,5 +70,17 @@ public class UsersService {
 
     public Optional<UserEntity> getUserByEmail(String email) {
         return usersRepository.findByEmail(email);
+    }
+
+    public Optional<UserEntity> getUserByToken(String token) {
+        return getUserByEmail(jwtService.extractUsername(token));
+    }
+
+    public ResponseEntity<?> logoutUser(String auth) {
+        Optional<UserEntity> optionalUser = getUserByToken(auth);
+        UserEntity user = optionalUser.get();
+        user.setLogout(new Date());
+        usersRepository.save(user);
+        return ResponseEntity.ok().build();
     }
 }

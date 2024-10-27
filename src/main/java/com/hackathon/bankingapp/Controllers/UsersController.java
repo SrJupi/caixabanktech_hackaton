@@ -31,4 +31,9 @@ public class UsersController {
     public ResponseEntity<?> loginUser(@Valid @RequestBody UserLoginDTO userLoginDto) {
         return usersService.loginUser(userLoginDto);
     }
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> logoutUser(@RequestHeader("Authorization") String auth) {
+        return usersService.logoutUser(auth.substring(7));
+    }
 }

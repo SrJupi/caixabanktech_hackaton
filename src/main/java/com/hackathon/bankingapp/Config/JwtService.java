@@ -1,8 +1,11 @@
 package com.hackathon.bankingapp.Config;
 
+import com.hackathon.bankingapp.Entities.UserEntity;
+import com.hackathon.bankingapp.Services.UsersService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +26,10 @@ public class JwtService {
     private String SECRET_KEY;
     @Value("${jwt.expiration}")
     int expiration;
+
+    @Autowired
+    private UsersService usersService;
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -49,15 +56,22 @@ public class JwtService {
                 .compact();
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
+    public boolean isTokenValid(String token, UserEntity userDetails) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final Date logout = userDetails.getLogout();
+        return (
+                username.equals(userDetails.getUsername())
+                        && !isTokenExpired(token)
+                        && !extractIssuedAt(token).before(logout));
     }
 
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
+    private Date extractIssuedAt(String token) {
+        return extractClaim(token, Claims::getIssuedAt);
+    }
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }

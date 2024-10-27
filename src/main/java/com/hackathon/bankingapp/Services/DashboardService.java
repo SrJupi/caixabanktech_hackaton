@@ -15,10 +15,9 @@ import java.util.Optional;
 public class DashboardService {
 
     private final UsersService usersService;
-    private final JwtService jwtService;
 
     public ResponseEntity<?> getUserInfo(String authorization) {
-        Optional<UserEntity> optionalUser = usersService.getUserByEmail(jwtService.extractUsername(authorization));
+        Optional<UserEntity> optionalUser = usersService.getUserByToken(authorization);
         if (optionalUser.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -26,7 +25,7 @@ public class DashboardService {
     }
 
     public ResponseEntity<?> getAccountInfo(String authorization) {
-        Optional<UserEntity> optionalUser = usersService.getUserByEmail(jwtService.extractUsername(authorization));
+        Optional<UserEntity> optionalUser = usersService.getUserByToken(authorization);
         if (optionalUser.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
