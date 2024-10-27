@@ -2,7 +2,6 @@ FROM maven:3.9.9-eclipse-temurin-21-jammy AS builder
 # Set the working directory
 WORKDIR /app
 
-# Copy only the Maven wrapper and the pom.xml first
 COPY pom.xml .
 RUN mvn -e -B dependency:resolve
 COPY src ./src

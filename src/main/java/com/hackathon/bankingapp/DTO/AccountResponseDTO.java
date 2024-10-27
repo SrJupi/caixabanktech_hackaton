@@ -1,7 +1,6 @@
 package com.hackathon.bankingapp.DTO;
 
 import com.hackathon.bankingapp.Entities.AccountEntity;
-import com.hackathon.bankingapp.Entities.UserEntity;
 import lombok.Getter;
 import lombok.Setter;
 

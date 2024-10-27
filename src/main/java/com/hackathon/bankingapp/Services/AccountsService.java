@@ -1,16 +1,15 @@
 package com.hackathon.bankingapp.Services;
 
 import com.hackathon.bankingapp.DTO.MsgDTO;
+import com.hackathon.bankingapp.DTO.PinCreationDTO;
+import com.hackathon.bankingapp.DTO.PinUpdateDTO;
 import com.hackathon.bankingapp.DTO.RequestTransaction;
-import com.hackathon.bankingapp.DTO.UserResponseDTO;
 import com.hackathon.bankingapp.Entities.AccountEntity;
 import com.hackathon.bankingapp.Entities.UserEntity;
 import com.hackathon.bankingapp.Repositories.AccountRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.Optional;
 
@@ -52,4 +51,34 @@ public class AccountsService {
         accountRepository.save(account);
         return ResponseEntity.ok(new MsgDTO("Cash withdraw successfully"));
     }
+
+    boolean validatePin(String pin) {
+        return pin != null && pin.length() == 4 && pin.matches("\\d{4}");
+    }
+    public ResponseEntity<?> createPin(PinCreationDTO pin, String token) {
+        UserEntity user = usersService.getUserByToken(token).get();
+        if (!usersService.comparePasswords(user.getHashedPassword(), pin.getPassword()) ||
+                user.getPin() != null ||
+                !validatePin(pin.getPin())) {
+            return ResponseEntity.badRequest().body("Bad credentials");
+        }
+        user.setPin(pin.getPin());
+        usersService.updateUser(user);
+        return ResponseEntity.ok(new MsgDTO("PIN created successfully"));
+    }
+
+    public ResponseEntity<?> updatePin(PinUpdateDTO pin, String token) {
+        UserEntity user = usersService.getUserByToken(token).get();
+        if (!usersService.comparePasswords(user.getHashedPassword(), pin.getPassword()) ||
+                user.getPin() == null ||
+                !validatePin(pin.getNewPin()) ||
+                !pin.getOldPin().equals(user.getPin())
+        ) {
+            return ResponseEntity.badRequest().body("Bad credentials");
+        }
+        user.setPin(pin.getNewPin());
+        usersService.updateUser(user);
+        return ResponseEntity.ok(new MsgDTO("PIN updated successfully"));
+    }
+
 }

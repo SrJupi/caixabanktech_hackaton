@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import java.util.Collection;
 import java.util.Date;
@@ -32,6 +31,7 @@ public class UserEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role    role;
+    private String  pin;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id", referencedColumnName = "id")
@@ -45,10 +45,11 @@ public class UserEntity implements UserDetails {
         this.email = userRegisterDTO.getEmail();
         this.phoneNumber = userRegisterDTO.getPhoneNumber();
         this.address = userRegisterDTO.getAddress();
-        this.hashedPassword = BCrypt.hashpw(userRegisterDTO.getPassword(), BCrypt.gensalt());
+        this.hashedPassword = userRegisterDTO.getPassword();
         this.account = new AccountEntity(0.0);
         this.role = Role.USER;
         this.logout = new Date();
+        this.pin = null;
     }
 
     public UUID getAccountNumber() {

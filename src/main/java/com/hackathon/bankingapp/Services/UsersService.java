@@ -8,11 +8,8 @@ import com.hackathon.bankingapp.DTO.UserResponseDTO;
 import com.hackathon.bankingapp.Entities.UserEntity;
 import com.hackathon.bankingapp.Repositories.UsersRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +54,7 @@ public class UsersService {
         if (optionalUser.isEmpty()) {
             return ResponseEntity.badRequest().body("User not found for the given identifier: " + userLoginDto.getIdentifier());
         }
-        if (optionalUser.get().getHashedPassword().equals(passwordEncoder.encode(userLoginDto.getPassword()))) {
+        if (!passwordEncoder.matches(userLoginDto.getPassword(), optionalUser.get().getHashedPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Bad credentials");
         }
         TokenDTO token = new TokenDTO(jwtService.generateToken(optionalUser.get()));
@@ -82,5 +79,13 @@ public class UsersService {
         user.setLogout(new Date());
         usersRepository.save(user);
         return ResponseEntity.ok().build();
+    }
+
+    public boolean comparePasswords(String originalPassword, String newPassword) {
+        return passwordEncoder.matches(newPassword, originalPassword);
+    }
+
+    public void updateUser(UserEntity user) {
+        usersRepository.save(user);
     }
 }

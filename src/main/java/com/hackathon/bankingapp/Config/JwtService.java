@@ -4,16 +4,14 @@ import com.hackathon.bankingapp.Entities.UserEntity;
 import com.hackathon.bankingapp.Services.UsersService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
-import java.security.KeyStore;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;

@@ -1,7 +1,6 @@
 package com.hackathon.bankingapp.Security;
 
 import com.hackathon.bankingapp.Config.JwtAuthenticationFilter;
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

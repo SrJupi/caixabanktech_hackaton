@@ -1,6 +1,5 @@
 package com.hackathon.bankingapp.Services;
 
-import com.hackathon.bankingapp.Config.JwtService;
 import com.hackathon.bankingapp.DTO.AccountResponseDTO;
 import com.hackathon.bankingapp.DTO.UserResponseDTO;
 import com.hackathon.bankingapp.Entities.UserEntity;

@@ -1,19 +1,13 @@
 package com.hackathon.bankingapp.Controllers;
 
-import com.hackathon.bankingapp.DTO.TokenDTO;
 import com.hackathon.bankingapp.DTO.UserLoginDTO;
 import com.hackathon.bankingapp.DTO.UserRegisterDTO;
-import com.hackathon.bankingapp.DTO.UserResponseDTO;
-import com.hackathon.bankingapp.Entities.UserEntity;
 import com.hackathon.bankingapp.Services.UsersService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor

@@ -1,13 +1,16 @@
 package com.hackathon.bankingapp.Controllers;
 
+import com.hackathon.bankingapp.DTO.PinCreationDTO;
+import com.hackathon.bankingapp.DTO.PinUpdateDTO;
 import com.hackathon.bankingapp.DTO.RequestTransaction;
 import com.hackathon.bankingapp.Services.AccountsService;
-import com.hackathon.bankingapp.Services.DashboardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,11 +35,21 @@ public class AccountController {
         return accountsService.withdraw(transaction, auth.substring(7));
     }
 
-/*    @PostMapping("/pin/create")
+    @PostMapping("/pin/create")
     public ResponseEntity<?> createPin(
             @RequestHeader("Authorization") String auth,
-            @RequestBody RequestTransaction transaction
-    )*/
+            @RequestBody PinCreationDTO pin
+    ) {
+        return accountsService.createPin(pin, auth.substring(7));
+    }
+
+    @PostMapping("/pin/update")
+    public ResponseEntity<?> createPin(
+            @RequestHeader("Authorization") String auth,
+            @RequestBody PinUpdateDTO pin
+    ) {
+        return accountsService.updatePin(pin, auth.substring(7));
+    }
 }
 
 
